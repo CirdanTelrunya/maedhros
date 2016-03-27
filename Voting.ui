@@ -154,6 +154,7 @@
     <addaction name="actionNew"/>
     <addaction name="actionOpen"/>
     <addaction name="actionSave"/>
+    <addaction name="actionGenerate"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
@@ -232,6 +233,11 @@
    </property>
    <property name="toolTip">
     <string>Save as...</string>
+   </property>
+  </action>
+  <action name="actionGenerate">
+   <property name="text">
+    <string>Generate...</string>
    </property>
   </action>
  </widget>

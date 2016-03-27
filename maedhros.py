@@ -9,7 +9,9 @@ from PyQt5.QtWidgets import (QAction, QActionGroup, QApplication, QMainWindow, Q
                              QInputDialog, QLineEdit)
 from Project import Project
 import pickle
-
+import numpy as np
+from operator import itemgetter
+import exifread
 
 class MyWindow(QMainWindow):
     def __init__(self):
@@ -20,6 +22,7 @@ class MyWindow(QMainWindow):
         self.actionSave.triggered.connect(self.save)
         self.actionQuit.triggered.connect(self.close)
         self.actionAdd.triggered.connect(self.addUser)
+        self.actionGenerate.triggered.connect(self.generate)
         self.usersGroup = QActionGroup(self)
         self.show()
         self.project = None
@@ -146,8 +149,28 @@ class MyWindow(QMainWindow):
     def passImages(self):
         """"""
         self.setImages()
+    def generate(self):
+        """"""
+        size = len(self.project.images)
+        results = np.zeros((size, size), dtype=np.int32)
+        for user in self.project.users:
+            tmp = np.copy(user.scores)
+            np.fill_diagonal(tmp, 0)
+            results += tmp
+        results = enumerate(np.sum(results, axis=1))
+        print('results =\n', sorted(results, key=itemgetter(1), reverse=True))
         
 if __name__ == '__main__':
+    
+    f = open('/home/cirdan/Photos/Cambodge_2015/Nathalie/IMG_7392.JPG', 'rb')
+    # tags = exifread.process_file(f)
+    # for tag in tags.keys():
+    #     if tag not in ('JPEGThumbnail', 'TIFFThumbnail', 'Filename', 'EXIF MakerNote'):
+    #         print("Key: %s, value %s" % (tag, tags[tag]))
+    
+    tags = exifread.process_file(f, stop_tag='EXIF DateTimeDigitized', details=False)
+    print('date =', tags['EXIF DateTimeDigitized'])
+    
     app = QApplication(sys.argv)
     window = MyWindow()
     sys.exit(app.exec_())
