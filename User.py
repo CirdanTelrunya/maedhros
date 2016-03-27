@@ -44,8 +44,14 @@ class User:
         """"""
         self.scores[img0, img1] += 1
         self.scores[img1, img0] += 1
-        tmp = np.copy(self.scores)
-        np.fill_diagonal(tmp, 0)
-        result = enumerate(np.sum(tmp, axis=1))
-        print('result =\n', result)
-        print('result =\n', sorted(result, key=itemgetter(1), reverse=True))
+        # tmp = np.copy(self.scores)
+        # np.fill_diagonal(tmp, 0)
+        # result = enumerate(np.sum(tmp, axis=1))
+        # print('result =\n', result)
+        # print('result =\n', sorted(result, key=itemgetter(1), reverse=True))
+
+    def eliminate(self, img):
+        """"""
+        # all scores are negate to a maximum
+        self.scores[img,:] = -self.scores.shape[0]
+        print('self.scores =\n', self.scores)

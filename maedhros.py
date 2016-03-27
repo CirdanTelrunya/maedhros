@@ -68,7 +68,7 @@ class MyWindow(QMainWindow):
 
     def addUser(self):
         """"""
-        text, ok = QInputDialog.getText(self, 'QInputDialog.getText()',
+        text, ok = QInputDialog.getText(self, 'Add user',
                                         'User name:', QLineEdit.Normal)
         if ok and text != '':
             userAct = QAction(text, self, checkable=True, triggered=self.selectUser)
@@ -127,6 +127,24 @@ class MyWindow(QMainWindow):
         """"""
         print('selected images : ', self.contest)
         self.project.current_user.draw(self.contest[0], self.contest[1])
+        self.setImages()
+
+    def suppress(self):
+        """"""
+        eliminate = []
+        if self.cbxImg0.isChecked():
+            eliminate.append(self.contest[0])
+        if self.cbxImg1.isChecked():
+            eliminate.append(self.contest[1])
+        for img in eliminate:
+            self.project.current_user.eliminate(img)
+        self.cbxImg0.setChecked(False)
+        self.cbxImg1.setChecked(False)
+        if eliminate:
+            self.setImages()
+        
+    def passImages(self):
+        """"""
         self.setImages()
         
 if __name__ == '__main__':
